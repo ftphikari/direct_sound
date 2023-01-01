@@ -35,7 +35,7 @@ DirectSound_Context :: struct {
 	GetDeviceID : proc "std" (pGuidSrc: win32.LPCGUID, pGuidDest: win32.LPCGUID) -> win32.HRESULT,
 }
 
-init :: proc(ds: ^DirectSound_Context) -> bool {
+init :: proc() -> (ds: DirectSound_Context, success: bool) {
 	ds._lib = dynlib.load_library("dsound.dll") or_return
 
 	ti := runtime.type_info_base(type_info_of(DirectSound_Context))
@@ -51,7 +51,8 @@ init :: proc(ds: ^DirectSound_Context) -> bool {
 		field_ptr^ = proc_ptr
 	}
 
-	return true
+	success = true
+	return
 }
 
 destroy :: proc(ctx: ^DirectSound_Context) {
